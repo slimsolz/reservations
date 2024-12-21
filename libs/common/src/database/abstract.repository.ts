@@ -13,7 +13,7 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
       _id: new Types.ObjectId(),
     });
 
-    return (await createdDocument.save()).toJSON as unknown as TDocument;
+    return (await createdDocument.save()).toJSON() as unknown as TDocument;
   }
 
   async findOne(filterQuery: FilterQuery<TDocument>): Promise<TDocument> {
