@@ -31,17 +31,21 @@ export class UsersService {
   }
 
   async verifyUser(email: string, password: string) {
-    const user = await this.usersRepository.findOne({ email });
-    const isPasswordValid = await bcrypt.compare(password, user.password);
+    try {
+      const user = await this.usersRepository.findOne({ email });
+      const isPasswordValid = await bcrypt.compare(password, user.password);
 
-    if (!isPasswordValid) {
+      if (!isPasswordValid) {
+        throw new UnauthorizedException('credentials are not valid');
+      }
+
+      return user;
+    } catch (error) {
       throw new UnauthorizedException('credentials are not valid');
     }
-
-    return user;
   }
 
   async getUser(getUserDto: GetUserDto) {
-    return await this.usersRepository.findOne(getUserDto);
+    return await this.usersRepository.findOne(getUserDto, { password: 0 });
   }
 }

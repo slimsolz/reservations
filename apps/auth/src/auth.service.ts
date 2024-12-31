@@ -1,6 +1,6 @@
 import { ConfigService } from '@nestjs/config';
 import { Injectable } from '@nestjs/common';
-import { UserDocument } from './users/models/users.schema';
+import { UserDocument } from '@app/common';
 import { Response } from 'express';
 import { JwtService } from '@nestjs/jwt';
 import { TokenPayload } from './interfaces/token-payload.interface';
@@ -19,7 +19,7 @@ export class AuthService {
 
     const expires = new Date();
     expires.setSeconds(
-      expires.getSeconds() + this.configService.get('JWT_EXPIRATION'),
+      expires.getSeconds() + Number(this.configService.get('JWT_EXPIRATION')),
     );
 
     const token = this.jwtService.sign(tokenPayload);
